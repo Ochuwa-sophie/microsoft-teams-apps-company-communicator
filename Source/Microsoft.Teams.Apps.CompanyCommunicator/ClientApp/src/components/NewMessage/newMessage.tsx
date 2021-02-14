@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 import { RouteComponentProps } from 'react-router-dom';
 import { withTranslation, WithTranslation } from "react-i18next";
 import { Input, TextArea, Radiobutton, RadiobuttonGroup } from 'msteams-ui-components-react';
@@ -6,7 +7,6 @@ import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import * as AdaptiveCards from "adaptivecards";
 import { Button, Loader, Dropdown, Text } from '@stardust-ui/react';
 import * as microsoftTeams from "@microsoft/teams-js";
-
 import './newMessage.scss';
 import './teamTheme.scss';
 import { getDraftNotification, getTeams, createDraftNotification, updateDraftNotification, searchGroups, getGroups, verifyGroupAccess  } from '../../apis/messageListApi';
@@ -17,6 +17,11 @@ import {
 import { getBaseUrl } from '../../configVariables';
 import { ImageUtil } from '../../utility/imageutility';
 import { TFunction } from "i18next";
+// import { Editor, EditorState } from "draft-js";
+import { Editor, EditorState} from 'react-draft-wysiwyg';
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+
+// const { Map } = require("immutable");
 
 type dropdownItem = {
     key: string,
@@ -44,7 +49,7 @@ export interface IDraftMessage {
 
 export interface formState {
     title: string,
-    summary?: string,
+    summary?: string, //editorState: EditorState.createEmpty(),
     btnLink?: string,
     imageLink?: string,
     btnTitle?: string,
@@ -75,13 +80,16 @@ export interface formState {
     errorButtonUrlMessage: string,
 }
 
+
 export interface INewMessageProps extends RouteComponentProps, WithTranslation {
     getDraftMessagesList?: any;
 }
 
 class NewMessage extends React.Component<INewMessageProps, formState> {
+    
     readonly localize: TFunction;
     private card: any;
+
 
     constructor(props: INewMessageProps) {
         super(props);
@@ -92,7 +100,7 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
 
         this.state = {
             title: "",
-            summary: "",
+            summary: editorState.createEmpty(),
             author: "",
             btnLink: "",
             imageLink: "",
@@ -118,8 +126,11 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
             selectedGroups: [],
             errorImageUrlMessage: "",
             errorButtonUrlMessage: "",
+            
         }
+        
     }
+    
 
     public async componentDidMount() {
         microsoftTeams.initialize();
@@ -338,6 +349,7 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
                                     autoComplete="off"
                                     required
                                 />
+                
 
                                 <Input
                                     className="inputField"
@@ -348,14 +360,28 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
                                     errorLabel={this.state.errorImageUrlMessage}
                                     autoComplete="off"
                                 />
-
+                                {/* todo */}
                                 <TextArea
                                     className="inputField textArea"
                                     autoFocus
                                     placeholder={this.localize("Summary")}
                                     label={this.localize("Summary")}
                                     value={this.state.summary}
+                                    editorState={this.state.summary}
+                                    toolbarClassName="toolbarClassName"
+                                    wrapperClassName="wrapperClassName"
+                                    editorClassName="editorClassName"
+                                    onEditorStateChange={this.onSummaryChanged}
                                     onChange={this.onSummaryChanged}
+
+                                    /* <Editor
+                                    className="inputField"
+                                    editorState={EditorState}
+                                    toolbarClassName="toolbarClassName"
+                                    wrapperClassName="wrapperClassName"
+                                    editorClassName="editorClassName"
+                                    onEditorStateChange={this.onEditorStateChange}
+                                    /> */
                                 />
 
                                 <Input
@@ -482,6 +508,7 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
                 return (<div>Error</div>);
             }
         }
+
     }
 
     private onGroupSelected = (value: any) => {
