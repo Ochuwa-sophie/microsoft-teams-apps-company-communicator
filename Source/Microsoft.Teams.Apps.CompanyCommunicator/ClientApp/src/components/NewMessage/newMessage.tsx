@@ -101,11 +101,11 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
 
         this.state = {
             title: "",
-            //summary: EditorState.createEmpty(),
+            summary: "",
             author: "",
-            // btnLink: "",
-            // imageLink: "",
-            // btnTitle: "",
+            btnLink: "",
+            imageLink: "",
+            btnTitle: "",
             card: this.card,
             page: "CardCreation",
             teamsOptionSelected: true,
