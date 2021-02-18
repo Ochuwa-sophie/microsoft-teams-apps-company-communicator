@@ -17,11 +17,10 @@ import {
 import { getBaseUrl } from '../../configVariables';
 import { ImageUtil } from '../../utility/imageutility';
 import { TFunction } from "i18next";
-// import { Editor, EditorState } from "draft-js";
-import { Editor, EditorState} from 'react-draft-wysiwyg';
+import { Editor, EditorState } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import { RichUtils} from 'draft-js';
 
-// const { Map } = require("immutable");
 
 type dropdownItem = {
     key: string,
@@ -49,8 +48,7 @@ export interface IDraftMessage {
 
 export interface formState {
     title: string,
-    summary?: string, 
-    EditorState?:string,
+    summary?: string,
     btnLink?: string,
     imageLink?: string,
     btnTitle?: string,
@@ -81,16 +79,13 @@ export interface formState {
     errorButtonUrlMessage: string,
 }
 
-
 export interface INewMessageProps extends RouteComponentProps, WithTranslation {
     getDraftMessagesList?: any;
 }
 
 class NewMessage extends React.Component<INewMessageProps, formState> {
-    
     readonly localize: TFunction;
     private card: any;
-
 
     constructor(props: INewMessageProps) {
         super(props);
@@ -127,11 +122,8 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
             selectedGroups: [],
             errorImageUrlMessage: "",
             errorButtonUrlMessage: "",
-            
         }
-        
     }
-    
 
     public async componentDidMount() {
         microsoftTeams.initialize();
@@ -350,7 +342,6 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
                                     autoComplete="off"
                                     required
                                 />
-                
 
                                 <Input
                                     className="inputField"
@@ -361,28 +352,14 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
                                     errorLabel={this.state.errorImageUrlMessage}
                                     autoComplete="off"
                                 />
-                                {/* todo */}
+
                                 <TextArea
                                     className="inputField textArea"
                                     autoFocus
                                     placeholder={this.localize("Summary")}
                                     label={this.localize("Summary")}
                                     value={this.state.summary}
-                                    //editorState={this.state.summary}
-                                   // toolbarClassName="toolbarClassName"
-                                    // wrapperClassName="wrapperClassName"
-                                    // editorClassName="editorClassName"
-                                    // onEditorStateChange={this.onSummaryChanged}
-                                    // onChange={this.onSummaryChanged}
-
-                                    /* <Editor
-                                    className="inputField"
-                                    editorState={EditorState}
-                                    toolbarClassName="toolbarClassName"
-                                    wrapperClassName="wrapperClassName"
-                                    editorClassName="editorClassName"
-                                    onEditorStateChange={this.onEditorStateChange}
-                                    /> */
+                                    onChange={this.onSummaryChanged}
                                 />
 
                                 <Input
@@ -509,7 +486,6 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
                 return (<div>Error</div>);
             }
         }
-
     }
 
     private onGroupSelected = (value: any) => {
