@@ -757,11 +757,11 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
         let showDefaultCard = (!this.state.title && !this.state.imageLink && !event.target.value && !this.state.author && !this.state.btnTitle && !this.state.btnLink);
         setCardTitle(this.card, this.state.title);
         setCardImageLink(this.card, this.state.imageLink);
-        setCardSummary(this.card, event.target.value);
+        setCardSummary(this.card, "Hello world");
         setCardAuthor(this.card, this.state.author);
         setCardBtn(this.card, this.state.btnTitle, this.state.btnLink);
         this.setState({
-            summary: event.target.value,
+            summary: "Hello world",
             card: this.card
         }, () => {
             if (showDefaultCard) {
