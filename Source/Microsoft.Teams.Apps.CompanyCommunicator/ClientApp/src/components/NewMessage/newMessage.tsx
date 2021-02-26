@@ -17,9 +17,11 @@ import {
 import { getBaseUrl } from '../../configVariables';
 import { ImageUtil } from '../../utility/imageutility';
 import { TFunction } from "i18next";
-import { Editor, EditorState } from 'react-draft-wysiwyg';
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import { RichUtils} from 'draft-js';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+// import { Editor, EditorState } from 'react-draft-wysiwyg';
+// import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+// import { RichUtils} from 'draft-js';
 
 
 type dropdownItem = {
@@ -353,13 +355,34 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
                                     autoComplete="off"
                                 />
 
-                                <TextArea
+                                {/* <TextArea
                                     className="inputField textArea"
                                     autoFocus
                                     placeholder={this.localize("Summary")}
                                     label={this.localize("Summary")}
                                     value={this.state.summary}
                                     onChange={this.onSummaryChanged}
+                                /> */}
+                                <CKEditor
+                                    editor={ClassicEditor}
+                                    data={this.state.summary}
+                                    onInit={(editor: any) => {
+                                        // You can store the "editor" and use when it is needed.
+                                        console.log('Editor is ready to use!', editor);
+                                    }}
+                                    onChange={
+                                        this.onSummaryChanged
+                                    //     (event: any, editor: any) => {
+                                    //     const data = editor.getData();
+                                    //     console.log({ event, editor, data });
+                                    // }
+                                }
+                                    onBlur={(event: any, editor: any) => {
+                                        console.log('Blur.', editor);
+                                    }}
+                                    onFocus={(event: any, editor: any) => {
+                                        console.log('Focus.', editor);
+                                    }}
                                 />
 
                                 <Input
@@ -752,8 +775,11 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
             this.updateCard();
         });
     }
-
-    private onSummaryChanged = (event: any) => {
+    // {(event: any, ) => {
+    //     const data = editor.getData();
+    //     console.log({ event, editor, data });
+    // }}
+    private onSummaryChanged = (event: any, editor: any) => {
         let showDefaultCard = (!this.state.title && !this.state.imageLink && !event.target.value && !this.state.author && !this.state.btnTitle && !this.state.btnLink);
         setCardTitle(this.card, this.state.title);
         setCardImageLink(this.card, this.state.imageLink);
