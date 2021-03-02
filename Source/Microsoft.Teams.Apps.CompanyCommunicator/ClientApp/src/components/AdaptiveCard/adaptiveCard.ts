@@ -3,30 +3,30 @@ import { TFunction } from "i18next";
 export const getInitAdaptiveCard = (t: TFunction) => {
     const titleTextAsString = t("TitleText");
     return (
-        {
-            "type": "AdaptiveCard",
-            "body": [
-                {
-                    "type": "TextBlock",
-                    "weight": "Bolder",
-                    "text": titleTextAsString,
-                    "size": "ExtraLarge",
-                    "wrap": true
-                },
-                {
-                    "type": "Image",
-                    "spacing": "Default",
-                    "url": "",
-                    "size": "Stretch",
-                    "width": "400px",
-                    "altText": ""
-                },
-                {
-                    "type": "TextBlock",
-                    "text": "",
-                    "weight": "Bolder",
-                    "wrap": true
-                },
+        // {
+        //     "type": "AdaptiveCard",
+        //     "body": [
+        //         {
+        //             "type": "RichTextBlock",
+        //             "weight": "Bolder",
+        //             "text": titleTextAsString,
+        //             "size": "ExtraLarge",
+        //             "wrap": true
+        //         },
+        //         {
+        //             "type": "Image",
+        //             "spacing": "Default",
+        //             "url": "",
+        //             "size": "Stretch",
+        //             "width": "400px",
+        //             "altText": ""
+        //         },
+        //         {
+        //             "type": "TextBlock",
+        //             "text": "",
+        //             "weight": "Bolder",
+        //             "wrap": true
+        //         },
                 {
                     "type": "TextBlock",
                     "wrap": true,
