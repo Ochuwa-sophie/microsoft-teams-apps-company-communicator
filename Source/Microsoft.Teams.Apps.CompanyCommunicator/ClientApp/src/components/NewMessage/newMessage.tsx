@@ -14,6 +14,7 @@ import {
     getInitAdaptiveCard, setCardTitle, setCardImageLink, setCardSummary,
     setCardAuthor, setCardBtn
 } from '../AdaptiveCard/adaptiveCard';
+import{getInitAdaptiveSurveyCard, setCardName, setCardDepartment,setCardChoice,setCardReason,setCardSurveyBtn } from '../AdaptiveCard/survey';
 import { getBaseUrl } from '../../configVariables';
 import { ImageUtil } from '../../utility/imageutility';
 import { TFunction } from "i18next";
@@ -335,7 +336,34 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
                     <div className="taskModule">
                         <div className="formContainer">
                             <div className="formContentContainer" >
-                                <Input
+                                <input 
+                                 className='inputField'
+                                 value={this.state.title}
+                                 onChange={this.onTitleChanged}
+                                 placeholder={this.localize("PlaceHolderTitle")}
+                                />
+                                <input 
+                                 className='inputField'
+                                //  value={this.state.department}
+                                //  onChange={this.onDepartmentChanged}
+                                 placeholder={this.localize("PlaceHolderTitle")}
+                                />
+                                <input 
+                                 className='inputField'
+                                //  value={this.state.choice}
+                                //  onChange={this.onChoiceChanged}
+                                 placeholder={this.localize("PlaceHolderTitle")}
+                                />
+
+                                <TextArea
+                                    className="inputField textArea"
+                                    autoFocus
+                                    placeholder={this.localize("Reason")}
+                                    // value={this.state.reason}
+                                    // onChange={this.onReasonChanged}
+                                />
+                                
+                                {/* <Input
                                     className="inputField"
                                     value={this.state.title}
                                     label={this.localize("TitleText")}
@@ -343,9 +371,9 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
                                     onChange={this.onTitleChanged}
                                     autoComplete="off"
                                     required
-                                />
+                                /> */}
 
-                                <Input
+                                {/* <Input
                                     className="inputField"
                                     value={this.state.imageLink}
                                     label={this.localize("ImageURL")}
@@ -353,9 +381,9 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
                                     onChange={this.onImageLinkChanged}
                                     errorLabel={this.state.errorImageUrlMessage}
                                     autoComplete="off"
-                                />
+                                /> */}
 
-                                {/* <TextArea
+                                 {/* <TextArea
                                     className="inputField textArea"
                                     autoFocus
                                     placeholder={this.localize("Summary")}
@@ -363,7 +391,7 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
                                     value={this.state.summary}
                                     onChange={this.onSummaryChanged}
                                 /> */}
-                                <CKEditor
+                                {/* <CKEditor
                                     editor={ClassicEditor}
                                     data={this.state.summary}
                                     onInit={(editor: any) => {
@@ -371,11 +399,11 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
                                         console.log('Editor is ready to use!', editor);
                                     }}
                                     onChange={
-                                        this.onSummaryChanged
-                                    //     (event: any, editor: any) => {
-                                    //     const data = editor.getData();
-                                    //     console.log({ event, editor, data });
-                                    // }
+                                        // this.onSummaryChanged
+                                        (event: any, editor: any) => {
+                                        const data = editor.getData();
+                                        console.log({ event, editor, data });
+                                    }
                                 }
                                     onBlur={(event: any, editor: any) => {
                                         console.log('Blur.', editor);
@@ -383,27 +411,27 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
                                     onFocus={(event: any, editor: any) => {
                                         console.log('Focus.', editor);
                                     }}
-                                />
+                                /> */}
 
-                                <Input
+                                {/* <Input
                                     className="inputField"
                                     value={this.state.author}
                                     label={this.localize("Author")}
                                     placeholder={this.localize("Author")}
                                     onChange={this.onAuthorChanged}
                                     autoComplete="off"
-                                />
+                                /> */}
 
-                                <Input
+                                {/* <Input
                                     className="inputField"
                                     value={this.state.btnTitle}
                                     label={this.localize("ButtonTitle")}
                                     placeholder={this.localize("ButtonTitle")}
                                     onChange={this.onBtnTitleChanged}
                                     autoComplete="off"
-                                />
+                                /> */}
 
-                                <Input
+                                {/* <Input
                                     className="inputField"
                                     value={this.state.btnLink}
                                     label={this.localize("ButtonURL")}
@@ -411,7 +439,7 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
                                     onChange={this.onBtnLinkChanged}
                                     errorLabel={this.state.errorButtonUrlMessage}
                                     autoComplete="off"
-                                />
+                                /> */}
                             </div>
                             <div className="adaptiveCardContainer">
                             </div>
@@ -779,7 +807,7 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
     //     const data = editor.getData();
     //     console.log({ event, editor, data });
     // }}
-    private onSummaryChanged = (event: any, editor: any) => {
+    private onSummaryChanged = (event: any) => {
         let showDefaultCard = (!this.state.title && !this.state.imageLink && !event.target.value && !this.state.author && !this.state.btnTitle && !this.state.btnLink);
         setCardTitle(this.card, this.state.title);
         setCardImageLink(this.card, this.state.imageLink);
