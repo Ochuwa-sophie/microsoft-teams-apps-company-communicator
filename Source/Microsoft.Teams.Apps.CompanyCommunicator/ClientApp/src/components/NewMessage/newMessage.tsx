@@ -10,10 +10,10 @@ import * as microsoftTeams from "@microsoft/teams-js";
 import './newMessage.scss';
 import './teamTheme.scss';
 import { getDraftNotification, getTeams, createDraftNotification, updateDraftNotification, searchGroups, getGroups, verifyGroupAccess  } from '../../apis/messageListApi';
-import {
-    getInitAdaptiveCard, setCardTitle, setCardImageLink, setCardSummary,
-    setCardAuthor, setCardBtn
-} from '../AdaptiveCard/adaptiveCard';
+// import {
+//     getInitAdaptiveCard, setCardTitle, setCardImageLink, setCardSummary,
+//     setCardAuthor, setCardBtn
+// } from '../AdaptiveCard/adaptiveCard';
 import{getInitAdaptiveSurveyCard, setCardName, setCardDepartment,setCardChoice,setCardReason,setCardSurveyBtn } from '../AdaptiveCard/survey';
 import { getBaseUrl } from '../../configVariables';
 import { ImageUtil } from '../../utility/imageutility';
@@ -50,12 +50,12 @@ export interface IDraftMessage {
 }
 
 export interface formState {
-    title: string,
-    summary?: string,
-    btnLink?: string,
-    imageLink?: string,
-    btnTitle?: string,
-    author: string,
+    name: string,
+    reason?: string,
+    choice?: string,
+    department?: string,
+    // btnTitle?: string,
+    // author: string,
     card?: any,
     page: string,
     teamsOptionSelected: boolean,
@@ -94,16 +94,16 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
         super(props);
         initializeIcons();
         this.localize = this.props.t;
-        this.card = getInitAdaptiveCard(this.localize);
+        this.card = getInitAdaptiveSurveyCard(this.localize);
         this.setDefaultCard(this.card);
 
         this.state = {
-            title: "",
-            summary: "",
-            author: "",
-            btnLink: "",
-            imageLink: "",
-            btnTitle: "",
+            name: "",
+            department: "",
+            choice: "",
+            reason: "",
+            // imageLink: "",
+            // btnTitle: "",
             card: this.card,
             page: "CardCreation",
             teamsOptionSelected: true,
@@ -162,10 +162,10 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
                     adaptiveCard.parse(this.state.card);
                     let renderedCard = adaptiveCard.render();
                     document.getElementsByClassName('adaptiveCardContainer')[0].appendChild(renderedCard);
-                    if (this.state.btnLink) {
-                        let link = this.state.btnLink;
-                        adaptiveCard.onExecuteAction = function (action) { window.open(link, '_blank'); };
-                    }
+                    // if (this.state.btnLink) {
+                    //     let link = this.state.btnLink;
+                    //     adaptiveCard.onExecuteAction = function (action) { window.open(link, '_blank'); };
+                    // }
                 })
             }
         });
@@ -207,17 +207,19 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
     }
 
     public setDefaultCard = (card: any) => {
-        const titleAsString = this.localize("TitleText");
-        const summaryAsString = this.localize("Summary");
-        const authorAsString = this.localize("Author1");
-        const buttonTitleAsString = this.localize("ButtonTitle");
+        const nameAsString = this.localize("TitleText");
+        const departmentAsString = this.localize("department");
+        const choiceAsString = this.localize("Choice");
+        const reasonAsString = this.localize("reason");
+        // const buttonTitleAsString = this.localize("ButtonTitle");
 
-        setCardTitle(card, titleAsString);
-        let imgUrl = getBaseUrl() + "/image/imagePlaceholder.png";
-        setCardImageLink(card, imgUrl);
-        setCardSummary(card, summaryAsString);
-        setCardAuthor(card, authorAsString);
-        setCardBtn(card, buttonTitleAsString, "https://adaptivecards.io");
+        setCardName(card, nameAsString);
+        // let imgUrl = getBaseUrl() + "/image/imagePlaceholder.png";
+        // setCardImageLink(card, imgUrl);
+        setCardDepartment(card, departmentAsString);
+        setCardChoice(card, choiceAsString);
+        setCardReason(card, reasonAsString);
+        // setCardBtn(card, buttonTitleAsString, "https://adaptivecards.io");
     }
 
     private getTeamList = async () => {
@@ -296,23 +298,24 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
                 selectedGroups: draftMessageDetail.groups
             });
 
-            setCardTitle(this.card, draftMessageDetail.title);
-            setCardImageLink(this.card, draftMessageDetail.imageLink);
-            setCardSummary(this.card, draftMessageDetail.summary);
-            setCardAuthor(this.card, draftMessageDetail.author);
-            setCardBtn(this.card, draftMessageDetail.buttonTitle, draftMessageDetail.buttonLink);
+            setCardName(this.card, draftMessageDetail.name);
+            // setCardImageLink(this.card, draftMessageDetail.imageLink);
+            setCardReason(this.card, draftMessageDetail.reason);
+            setCardChoice(this.card, draftMessageDetail.choice);
+            // setCardBtn(this.card, draftMessageDetail.buttonTitle, draftMessageDetail.buttonLink);
 
             this.setState({
-                title: draftMessageDetail.title,
-                summary: draftMessageDetail.summary,
-                btnLink: draftMessageDetail.buttonLink,
-                imageLink: draftMessageDetail.imageLink,
-                btnTitle: draftMessageDetail.buttonTitle,
-                author: draftMessageDetail.author,
+                name: draftMessageDetail.name,
+                department: draftMessageDetail.department,
+                reason: draftMessageDetail.reason,
+                // btnLink: draftMessageDetail.buttonLink,
+                // imageLink: draftMessageDetail.imageLink,
+                // btnTitle: draftMessageDetail.buttonTitle,
+                choice: draftMessageDetail.choice,
                 allUsersOptionSelected: draftMessageDetail.allUsers,
                 loader: false
             }, () => {
-                this.updateCard();
+                // this.updateCard();
             });
         } catch (error) {
             return error;
@@ -338,8 +341,8 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
                             <div className="formContentContainer" >
                                 <input 
                                  className='inputField'
-                                 value={this.state.title}
-                                 onChange={this.onTitleChanged}
+                                 value={this.state.name}
+                                //  onChange={this.onTitleChanged}
                                  placeholder={this.localize("PlaceHolderTitle")}
                                 />
                                 <input 
@@ -446,9 +449,9 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
                         </div>
 
                         <div className="footerContainer">
-                            <div className="buttonContainer">
+                            {/* <div className="buttonContainer">
                                 <Button content={this.localize("Next")} disabled={this.isNextBtnDisabled()} id="saveBtn" onClick={this.onNext} primary />
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                 );
@@ -527,7 +530,7 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
 
                         <div className="footerContainer">
                             <div className="buttonContainer">
-                                <Button content={this.localize("Back")} onClick={this.onBack} secondary />
+                                {/* <Button content={this.localize("Back")} onClick={this.onBack} secondary /> */}
                                 <Button content={this.localize("SaveAsDraft")} disabled={this.isSaveBtnDisabled()} id="saveBtn" onClick={this.onSave} primary />
                             </div>
                         </div>
@@ -563,12 +566,12 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
         return (!teamsSelectionIsValid || !rostersSelectionIsValid || !groupsSelectionIsValid || nothingSelected)
     }
 
-    private isNextBtnDisabled = () => {
-        const title = this.state.title;
-        const btnTitle = this.state.btnTitle;
-        const btnLink = this.state.btnLink;
-        return !(title && ((btnTitle && btnLink) || (!btnTitle && !btnLink)) && (this.state.errorImageUrlMessage === "") && (this.state.errorButtonUrlMessage === ""));
-    }
+    // private isNextBtnDisabled = () => {
+    //     const title = this.state.title;
+    //     const btnTitle = this.state.btnTitle;
+    //     const btnLink = this.state.btnLink;
+    //     return !(title && ((btnTitle && btnLink) || (!btnTitle && !btnLink)) && (this.state.errorImageUrlMessage === "") && (this.state.errorButtonUrlMessage === ""));
+    // }
 
     private getItems = () => {
         const resultedTeams: dropdownItem[] = [];
@@ -694,29 +697,29 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
         this.state.selectedRosters.forEach(x => selctedRosters.push(x.team.id));
         this.state.selectedGroups.forEach(x => selectedGroups.push(x.team.id));
 
-        const draftMessage: IDraftMessage = {
-            id: this.state.messageId,
-            title: this.state.title,
-            imageLink: this.state.imageLink,
-            summary: this.state.summary,
-            author: this.state.author,
-            buttonTitle: this.state.btnTitle,
-            buttonLink: this.state.btnLink,
-            teams: selectedTeams,
-            rosters: selctedRosters,
-            groups: selectedGroups,
-            allUsers: this.state.allUsersOptionSelected
-        };
+        // const draftMessage: IDraftMessage = {
+        //     id: this.state.messageId,
+        //     title: this.state.name,
+        //     // imageLink: this.state.imageLink,
+        //     // reason: this.state.reason,
+        //     // department: this.state.department,
+        //     // buttonTitle: this.state.btnTitle,
+        //     // buttonLink: this.state.btnLink,
+        //     teams: selectedTeams,
+        //     rosters: selctedRosters,
+        //     groups: selectedGroups,
+        //     allUsers: this.state.allUsersOptionSelected
+        // };
 
-        if (this.state.exists) {
-            this.editDraftMessage(draftMessage).then(() => {
-                microsoftTeams.tasks.submitTask();
-            });
-        } else {
-            this.postDraftMessage(draftMessage).then(() => {
-                microsoftTeams.tasks.submitTask();
-            });
-        }
+        // if (this.state.exists) {
+        //     this.editDraftMessage(draftMessage).then(() => {
+        //         microsoftTeams.tasks.submitTask();
+        //     });
+        // } else {
+        //     this.postDraftMessage(draftMessage).then(() => {
+        //         microsoftTeams.tasks.submitTask();
+        //     });
+        // }
     }
 
     private editDraftMessage = async (draftMessage: IDraftMessage) => {
@@ -741,39 +744,39 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
         }
     }
 
-    private onNext = (event: any) => {
-        this.setState({
-            page: "AudienceSelection"
-        }, () => {
-            this.updateCard();
-        });
-    }
+    // private onNext = (event: any) => {
+    //     this.setState({
+    //         page: "AudienceSelection"
+    //     }, () => {
+    //         this.updateCard();
+    //     });
+    // }
 
-    private onBack = (event: any) => {
-        this.setState({
-            page: "CardCreation"
-        }, () => {
-            this.updateCard();
-        });
-    }
+    // private onBack = (event: any) => {
+    //     this.setState({
+    //         page: "CardCreation"
+    //     }, () => {
+    //         this.updateCard();
+    //     });
+    // }
 
-    private onTitleChanged = (event: any) => {
-        let showDefaultCard = (!event.target.value && !this.state.imageLink && !this.state.summary && !this.state.author && !this.state.btnTitle && !this.state.btnLink);
-        setCardTitle(this.card, event.target.value);
-        setCardImageLink(this.card, this.state.imageLink);
-        setCardSummary(this.card, this.state.summary);
-        setCardAuthor(this.card, this.state.author);
-        setCardBtn(this.card, this.state.btnTitle, this.state.btnLink);
-        this.setState({
-            title: event.target.value,
-            card: this.card
-        }, () => {
-            if (showDefaultCard) {
-                this.setDefaultCard(this.card);
-            }
-            this.updateCard();
-        });
-    }
+    // private onTitleChanged = (event: any) => {
+    //     let showDefaultCard = (!event.target.value && !this.state.imageLink && !this.state.summary && !this.state.author && !this.state.btnTitle && !this.state.btnLink);
+    //     setCardTitle(this.card, event.target.value);
+    //     setCardImageLink(this.card, this.state.imageLink);
+    //     setCardSummary(this.card, this.state.summary);
+    //     setCardAuthor(this.card, this.state.author);
+    //     setCardBtn(this.card, this.state.btnTitle, this.state.btnLink);
+    //     this.setState({
+    //         title: event.target.value,
+    //         card: this.card
+    //     }, () => {
+    //         if (showDefaultCard) {
+    //             this.setDefaultCard(this.card);
+    //         }
+    //         this.updateCard();
+    //     });
+    // }
 
     private onImageLinkChanged = (event: any) => {
         let url = event.target.value.toLowerCase();
@@ -787,146 +790,146 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
             });
         }
 
-        let showDefaultCard = (!this.state.title && !event.target.value && !this.state.summary && !this.state.author && !this.state.btnTitle && !this.state.btnLink);
-        setCardTitle(this.card, this.state.title);
-        setCardImageLink(this.card, event.target.value);
-        setCardSummary(this.card, this.state.summary);
-        setCardAuthor(this.card, this.state.author);
-        setCardBtn(this.card, this.state.btnTitle, this.state.btnLink);
-        this.setState({
-            imageLink: event.target.value,
-            card: this.card
-        }, () => {
-            if (showDefaultCard) {
-                this.setDefaultCard(this.card);
-            }
-            this.updateCard();
-        });
+        // let showDefaultCard = (!this.state.title && !event.target.value && !this.state.summary && !this.state.author && !this.state.btnTitle && !this.state.btnLink);
+        // setCardTitle(this.card, this.state.title);
+        // setCardImageLink(this.card, event.target.value);
+        // setCardSummary(this.card, this.state.summary);
+        // setCardAuthor(this.card, this.state.author);
+        // setCardBtn(this.card, this.state.btnTitle, this.state.btnLink);
+        // this.setState({
+        //     imageLink: event.target.value,
+        //     card: this.card
+        // }, () => {
+        //     if (showDefaultCard) {
+        //         this.setDefaultCard(this.card);
+        //     }
+        //     this.updateCard();
+        // });
     }
     // {(event: any, ) => {
     //     const data = editor.getData();
     //     console.log({ event, editor, data });
     // }}
-    private onSummaryChanged = (event: any) => {
-        let showDefaultCard = (!this.state.title && !this.state.imageLink && !event.target.value && !this.state.author && !this.state.btnTitle && !this.state.btnLink);
-        setCardTitle(this.card, this.state.title);
-        setCardImageLink(this.card, this.state.imageLink);
-        setCardSummary(this.card, "Hello world");
-        setCardAuthor(this.card, this.state.author);
-        setCardBtn(this.card, this.state.btnTitle, this.state.btnLink);
-        this.setState({
-            summary: "Hello world",
-            card: this.card
-        }, () => {
-            if (showDefaultCard) {
-                this.setDefaultCard(this.card);
-            }
-            this.updateCard();
-        });
-    }
+    // private onSummaryChanged = (event: any) => {
+    //     let showDefaultCard = (!this.state.name && !this.state.reason && !event.target.value && !this.state.department && !this.state.choice);
+    //     setCardName(this.card, this.state.name);
+    //     // setCardImageLink(this.card, this.state.imageLink);
+    //     setCardDepartment(this.card, this.state.department);
+    //     setCardChoice(this.card, this.state.choice);
+    //     setCardBtn(this.card, this.state.btnTitle, this.state.btnLink);
+    //     this.setState({
+    //         summary: "Hello world",
+    //         card: this.card
+    //     }, () => {
+    //         if (showDefaultCard) {
+    //             this.setDefaultCard(this.card);
+    //         }
+    //         this.updateCard();
+    //     });
+    // }
 
-    private onAuthorChanged = (event: any) => {
-        let showDefaultCard = (!this.state.title && !this.state.imageLink && !this.state.summary && !event.target.value && !this.state.btnTitle && !this.state.btnLink);
-        setCardTitle(this.card, this.state.title);
-        setCardImageLink(this.card, this.state.imageLink);
-        setCardSummary(this.card, this.state.summary);
-        setCardAuthor(this.card, event.target.value);
-        setCardBtn(this.card, this.state.btnTitle, this.state.btnLink);
-        this.setState({
-            author: event.target.value,
-            card: this.card
-        }, () => {
-            if (showDefaultCard) {
-                this.setDefaultCard(this.card);
-            }
-            this.updateCard();
-        });
-    }
+    // private onAuthorChanged = (event: any) => {
+    //     let showDefaultCard = (!this.state.title && !this.state.imageLink && !this.state.summary && !event.target.value && !this.state.btnTitle && !this.state.btnLink);
+    //     setCardTitle(this.card, this.state.title);
+    //     setCardImageLink(this.card, this.state.imageLink);
+    //     setCardSummary(this.card, this.state.summary);
+    //     setCardAuthor(this.card, event.target.value);
+    //     setCardBtn(this.card, this.state.btnTitle, this.state.btnLink);
+    //     this.setState({
+    //         author: event.target.value,
+    //         card: this.card
+    //     }, () => {
+    //         if (showDefaultCard) {
+    //             this.setDefaultCard(this.card);
+    //         }
+    //         this.updateCard();
+    //     });
+    // }
 
-    private onBtnTitleChanged = (event: any) => {
-        const showDefaultCard = (!this.state.title && !this.state.imageLink && !this.state.summary && !this.state.author && !event.target.value && !this.state.btnLink);
-        setCardTitle(this.card, this.state.title);
-        setCardImageLink(this.card, this.state.imageLink);
-        setCardSummary(this.card, this.state.summary);
-        setCardAuthor(this.card, this.state.author);
-        if (event.target.value && this.state.btnLink) {
-            setCardBtn(this.card, event.target.value, this.state.btnLink);
-            this.setState({
-                btnTitle: event.target.value,
-                card: this.card
-            }, () => {
-                if (showDefaultCard) {
-                    this.setDefaultCard(this.card);
-                }
-                this.updateCard();
-            });
-        } else {
-            delete this.card.actions;
-            this.setState({
-                btnTitle: event.target.value,
-            }, () => {
-                if (showDefaultCard) {
-                    this.setDefaultCard(this.card);
-                }
-                this.updateCard();
-            });
-        }
-    }
+    // private onBtnTitleChanged = (event: any) => {
+    //     const showDefaultCard = (!this.state.title && !this.state.imageLink && !this.state.summary && !this.state.author && !event.target.value && !this.state.btnLink);
+    //     setCardTitle(this.card, this.state.title);
+    //     setCardImageLink(this.card, this.state.imageLink);
+    //     setCardSummary(this.card, this.state.summary);
+    //     setCardAuthor(this.card, this.state.author);
+    //     if (event.target.value && this.state.btnLink) {
+    //         setCardBtn(this.card, event.target.value, this.state.btnLink);
+    //         this.setState({
+    //             btnTitle: event.target.value,
+    //             card: this.card
+    //         }, () => {
+    //             if (showDefaultCard) {
+    //                 this.setDefaultCard(this.card);
+    //             }
+    //             this.updateCard();
+    //         });
+    //     } else {
+    //         delete this.card.actions;
+    //         this.setState({
+    //             btnTitle: event.target.value,
+    //         }, () => {
+    //             if (showDefaultCard) {
+    //                 this.setDefaultCard(this.card);
+    //             }
+    //             this.updateCard();
+    //         });
+    //     }
+    // }
 
-    private onBtnLinkChanged = (event: any) => {
-        if (!(event.target.value === "" || event.target.value.toLowerCase().startsWith("https://"))) {
-            this.setState({
-                errorButtonUrlMessage: "URL must start with https://"
-            });
-        } else {
-            this.setState({
-                errorButtonUrlMessage: ""
-            });
-        }
+    // private onBtnLinkChanged = (event: any) => {
+    //     if (!(event.target.value === "" || event.target.value.toLowerCase().startsWith("https://"))) {
+    //         this.setState({
+    //             errorButtonUrlMessage: "URL must start with https://"
+    //         });
+    //     } else {
+    //         this.setState({
+    //             errorButtonUrlMessage: ""
+    //         });
+    //     }
 
-        const showDefaultCard = (!this.state.title && !this.state.imageLink && !this.state.summary && !this.state.author && !this.state.btnTitle && !event.target.value);
-        setCardTitle(this.card, this.state.title);
-        setCardSummary(this.card, this.state.summary);
-        setCardAuthor(this.card, this.state.author);
-        setCardImageLink(this.card, this.state.imageLink);
-        if (this.state.btnTitle && event.target.value) {
-            setCardBtn(this.card, this.state.btnTitle, event.target.value);
-            this.setState({
-                btnLink: event.target.value,
-                card: this.card
-            }, () => {
-                if (showDefaultCard) {
-                    this.setDefaultCard(this.card);
-                }
-                this.updateCard();
-            });
-        } else {
-            delete this.card.actions;
-            this.setState({
-                btnLink: event.target.value
-            }, () => {
-                if (showDefaultCard) {
-                    this.setDefaultCard(this.card);
-                }
-                this.updateCard();
-            });
-        }
-    }
+    //     const showDefaultCard = (!this.state.title && !this.state.imageLink && !this.state.summary && !this.state.author && !this.state.btnTitle && !event.target.value);
+    //     setCardTitle(this.card, this.state.title);
+    //     setCardSummary(this.card, this.state.summary);
+    //     setCardAuthor(this.card, this.state.author);
+    //     setCardImageLink(this.card, this.state.imageLink);
+    //     if (this.state.btnTitle && event.target.value) {
+    //         setCardBtn(this.card, this.state.btnTitle, event.target.value);
+    //         this.setState({
+    //             btnLink: event.target.value,
+    //             card: this.card
+    //         }, () => {
+    //             if (showDefaultCard) {
+    //                 this.setDefaultCard(this.card);
+    //             }
+    //             this.updateCard();
+    //         });
+    //     } else {
+    //         delete this.card.actions;
+    //         this.setState({
+    //             btnLink: event.target.value
+    //         }, () => {
+    //             if (showDefaultCard) {
+    //                 this.setDefaultCard(this.card);
+    //             }
+    //             this.updateCard();
+    //         });
+    //     }
+    // }
 
-    private updateCard = () => {
-        const adaptiveCard = new AdaptiveCards.AdaptiveCard();
-        adaptiveCard.parse(this.state.card);
-        const renderedCard = adaptiveCard.render();
-        const container = document.getElementsByClassName('adaptiveCardContainer')[0].firstChild;
-        if (container != null) {
-            container.replaceWith(renderedCard);
-        } else {
-            document.getElementsByClassName('adaptiveCardContainer')[0].appendChild(renderedCard);
-        }
-        const link = this.state.btnLink;
-        adaptiveCard.onExecuteAction = function (action) { window.open(link, '_blank'); }
-    }
-}
+//     private updateCard = () => {
+//         const adaptiveCard = new AdaptiveCards.AdaptiveCard();
+//         adaptiveCard.parse(this.state.card);
+//         const renderedCard = adaptiveCard.render();
+//         const container = document.getElementsByClassName('adaptiveCardContainer')[0].firstChild;
+//         if (container != null) {
+//             container.replaceWith(renderedCard);
+//         } else {
+//             document.getElementsByClassName('adaptiveCardContainer')[0].appendChild(renderedCard);
+//         }
+//         const link = this.state.btnLink;
+//         adaptiveCard.onExecuteAction = function (action) { window.open(link, '_blank'); }
+//     }
+// }
 
 const newMessageWithTranslation = withTranslation()(NewMessage);
-export default newMessageWithTranslation;
+// export default newMessageWithTranslation;
