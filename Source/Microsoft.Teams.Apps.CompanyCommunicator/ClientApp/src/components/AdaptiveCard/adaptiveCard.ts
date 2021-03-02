@@ -7,7 +7,7 @@ export const getInitAdaptiveCard = (t: TFunction) => {
             "type": "AdaptiveCard",
             "body": [
                 {
-                    "type": "TextBlock",
+                    "type": "RichTextBlock",
                     "weight": "Bolder",
                     "text": titleTextAsString,
                     "size": "ExtraLarge",
