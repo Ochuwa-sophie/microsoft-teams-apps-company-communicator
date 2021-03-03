@@ -14,6 +14,7 @@ import {
     getInitAdaptiveCard, setCardTitle, setCardImageLink, setCardSummary,
     setCardAuthor, setCardBtn
 } from '../AdaptiveCard/adaptiveCard';
+import{getInitAdaptiveSurveyCard, setCardName, setCardDepartment,setCardChoice,setCardReason,setCardSurveyBtn } from '../AdaptiveCard/survey';
 import { getBaseUrl } from '../../configVariables';
 import { ImageUtil } from '../../utility/imageutility';
 import { TFunction } from "i18next";
@@ -335,7 +336,7 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
                     <div className="taskModule">
                         <div className="formContainer">
                             <div className="formContentContainer" >
-                                <Input
+                                 <Input
                                     className="inputField"
                                     value={this.state.title}
                                     label={this.localize("TitleText")}
@@ -343,9 +344,9 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
                                     onChange={this.onTitleChanged}
                                     autoComplete="off"
                                     required
-                                />
+                                /> 
 
-                                <Input
+                                 <Input
                                     className="inputField"
                                     value={this.state.imageLink}
                                     label={this.localize("ImageURL")}
@@ -353,9 +354,9 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
                                     onChange={this.onImageLinkChanged}
                                     errorLabel={this.state.errorImageUrlMessage}
                                     autoComplete="off"
-                                />
+                                /> 
 
-                                {/* <TextArea
+                                 {/* <TextArea
                                     className="inputField textArea"
                                     autoFocus
                                     placeholder={this.localize("Summary")}
@@ -363,7 +364,7 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
                                     value={this.state.summary}
                                     onChange={this.onSummaryChanged}
                                 /> */}
-                                <CKEditor
+                                 <CKEditor
                                     editor={ClassicEditor}
                                     data={this.state.summary}
                                     onInit={(editor: any) => {
@@ -372,27 +373,27 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
                                     }}
                                     onChange={
                                         this.onSummaryChanged
-                                    //     (event: any, editor: any) => {
-                                    //     const data = editor.getData();
-                                    //     console.log({ event, editor, data });
+                                        // (event: any, editor: any) => {
+                                        // const data = editor.getData();
+                                        // console.log({ event, editor, data });
                                     // }
-                                }
+                                 }
                                     onBlur={(event: any, editor: any) => {
                                         console.log('Blur.', editor);
                                     }}
                                     onFocus={(event: any, editor: any) => {
                                         console.log('Focus.', editor);
                                     }}
-                                />
+                                /> 
 
-                                <Input
+                                 <Input
                                     className="inputField"
                                     value={this.state.author}
                                     label={this.localize("Author")}
                                     placeholder={this.localize("Author")}
                                     onChange={this.onAuthorChanged}
                                     autoComplete="off"
-                                />
+                                /> 
 
                                 <Input
                                     className="inputField"
@@ -779,15 +780,15 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
     //     const data = editor.getData();
     //     console.log({ event, editor, data });
     // }}
-    private onSummaryChanged = (event: any, editor: any) => {
+    private onSummaryChanged = (event: any) => {
         let showDefaultCard = (!this.state.title && !this.state.imageLink && !event.target.value && !this.state.author && !this.state.btnTitle && !this.state.btnLink);
         setCardTitle(this.card, this.state.title);
         setCardImageLink(this.card, this.state.imageLink);
-        setCardSummary(this.card, "Hello world");
+        setCardSummary(this.card, event.target.value);
         setCardAuthor(this.card, this.state.author);
         setCardBtn(this.card, this.state.btnTitle, this.state.btnLink);
         this.setState({
-            summary: "Hello world",
+            summary: event.target.value,
             card: this.card
         }, () => {
             if (showDefaultCard) {
