@@ -366,7 +366,7 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
                                 /> */}
                                  <CKEditor
                                     editor={ClassicEditor}
-                                    data={this.state.summary}
+                                    value={this.state.summary}
                                     onInit={(editor: any) => {
                                         // You can store the "editor" and use when it is needed.
                                         console.log('Editor is ready to use!', editor);
