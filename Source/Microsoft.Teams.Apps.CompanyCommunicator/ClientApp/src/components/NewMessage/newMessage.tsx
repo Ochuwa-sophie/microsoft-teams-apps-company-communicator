@@ -356,27 +356,27 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
                                     autoComplete="off"
                                 /> 
 
-                                 {/* <TextArea
+                                 <TextArea
                                     className="inputField textArea"
                                     autoFocus
                                     placeholder={this.localize("Summary")}
                                     label={this.localize("Summary")}
                                     value={this.state.summary}
                                     onChange={this.onSummaryChanged}
-                                /> */}
-                                 <CKEditor
+                                />
+                                 {/* <CKEditor
                                     editor={ClassicEditor}
-                                    value={this.state.summary}
+                                    data=""
                                     onInit={(editor: any) => {
                                         // You can store the "editor" and use when it is needed.
                                         console.log('Editor is ready to use!', editor);
                                     }}
                                     onChange={
-                                        this.onSummaryChanged
-                                        // (event: any, editor: any) => {
-                                        // const data = editor.getData();
-                                        // console.log({ event, editor, data });
-                                    // }
+                                        // this.onSummaryChanged
+                                        (event: any, editor: any) => {
+                                        const data = editor.getData();
+                                        console.log({ event, editor, data });
+                                    }
                                  }
                                     onBlur={(event: any, editor: any) => {
                                         console.log('Blur.', editor);
@@ -384,7 +384,7 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
                                     onFocus={(event: any, editor: any) => {
                                         console.log('Focus.', editor);
                                     }}
-                                /> 
+                                />  */}
 
                                  <Input
                                     className="inputField"
