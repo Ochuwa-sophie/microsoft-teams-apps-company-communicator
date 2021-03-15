@@ -1,6 +1,6 @@
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
 import { RouteComponentProps } from 'react-router-dom';
+import HtmlReactParser from 'html-react-parser';
 import { withTranslation, WithTranslation } from "react-i18next";
 import { Input, TextArea, Radiobutton, RadiobuttonGroup } from 'msteams-ui-components-react';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
@@ -14,15 +14,12 @@ import {
     getInitAdaptiveCard, setCardTitle, setCardImageLink, setCardSummary,
     setCardAuthor, setCardBtn
 } from '../AdaptiveCard/adaptiveCard';
-import{getInitAdaptiveSurveyCard, setCardName, setCardDepartment,setCardChoice,setCardReason,setCardSurveyBtn } from '../AdaptiveCard/survey';
+// import{getInitAdaptiveSurveyCard, setCardName, setCardDepartment,setCardChoice,setCardReason,setCardSurveyBtn } from '../AdaptiveCard/survey';
 import { getBaseUrl } from '../../configVariables';
 import { ImageUtil } from '../../utility/imageutility';
 import { TFunction } from "i18next";
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-// import { Editor, EditorState } from 'react-draft-wysiwyg';
-// import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-// import { RichUtils} from 'draft-js';
 
 
 type dropdownItem = {
@@ -51,7 +48,7 @@ export interface IDraftMessage {
 
 export interface formState {
     title: string,
-    summary?: string,
+    summary?: any,
     btnLink?: string,
     imageLink?: string,
     btnTitle?: string,
@@ -355,27 +352,46 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
                                     errorLabel={this.state.errorImageUrlMessage}
                                     autoComplete="off"
                                 /> 
-
-                                 <TextArea
+225
+                                 {/* <TextArea
                                     className="inputField textArea"
                                     autoFocus
                                     placeholder={this.localize("Summary")}
                                     label={this.localize("Summary")}
                                     value={this.state.summary}
                                     onChange={this.onSummaryChanged}
-                                />
-                                 {/* <CKEditor
+                                /> */}
+                                <div>
+                                  <p className='sum-label'>Summary</p>
+                                 <CKEditor
                                     editor={ClassicEditor}
-                                    data=""
+                                    data= ""
+                                    className="ck ck-editor"
                                     onInit={(editor: any) => {
                                         // You can store the "editor" and use when it is needed.
                                         console.log('Editor is ready to use!', editor);
                                     }}
+                                    config={{ckfinder: {
+                                        // Upload the images to the server using the CKFinder QuickUpload command.
+                                        // uploadUrl: 'https://infinioncompanycommunicator101.azurefd.net/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images&responseType=json'
+                                        uploadUrl: '/ckfinder/connector?command=QuickUpload&type=Images&responseType=json'
+                                      }}
+                                    }
                                     onChange={
-                                        // this.onSummaryChanged
                                         (event: any, editor: any) => {
                                         const data = editor.getData();
+                                        let showDefaultCard = (!this.state.title && !this.state.imageLink && !this.state.summary && !data && !this.state.btnTitle && !this.state.btnLink);   
                                         console.log({ event, editor, data });
+                                        setCardSummary(this.card, data);
+                                        this.setState({
+                                            summary: data,
+                                            card: this.card
+                                        }, () => {
+                                            if (showDefaultCard) {
+                                                this.setDefaultCard(this.card);
+                                            }
+                                            this.updateCard();
+                                        });
                                     }
                                  }
                                     onBlur={(event: any, editor: any) => {
@@ -384,8 +400,9 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
                                     onFocus={(event: any, editor: any) => {
                                         console.log('Focus.', editor);
                                     }}
-                                />  */}
-
+                                /> 
+                                
+                                </div>
                                  <Input
                                     className="inputField"
                                     value={this.state.author}
@@ -776,10 +793,7 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
             this.updateCard();
         });
     }
-    // {(event: any, ) => {
-    //     const data = editor.getData();
-    //     console.log({ event, editor, data });
-    // }}
+
     private onSummaryChanged = (event: any) => {
         let showDefaultCard = (!this.state.title && !this.state.imageLink && !event.target.value && !this.state.author && !this.state.btnTitle && !this.state.btnLink);
         setCardTitle(this.card, this.state.title);
