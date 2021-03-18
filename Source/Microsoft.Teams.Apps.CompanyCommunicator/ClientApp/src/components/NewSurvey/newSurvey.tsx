@@ -1,30 +1,16 @@
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
-import MarkdownIt from 'markdown-it';
-import MdEditor from 'react-markdown-editor-lite'
-// import style manually
-import 'react-markdown-editor-lite/lib/index.css';
 import { RouteComponentProps } from 'react-router-dom';
-// import HtmlReactParser from 'html-react-parser';
 import { withTranslation, WithTranslation } from "react-i18next";
 import { Input, TextArea, Radiobutton, RadiobuttonGroup } from 'msteams-ui-components-react';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import * as AdaptiveCards from "adaptivecards";
 import { Button, Loader, Dropdown, Text } from '@stardust-ui/react';
 import * as microsoftTeams from "@microsoft/teams-js";
-import './newMessage.scss';
-import './teamTheme.scss';
 import { getDraftNotification, getTeams, createDraftNotification, updateDraftNotification, searchGroups, getGroups, verifyGroupAccess  } from '../../apis/messageListApi';
-import {
-    getInitAdaptiveCard, setCardTitle, setCardImageLink, setCardSummary,
-    setCardAuthor, setCardBtn
-} from '../AdaptiveCard/adaptiveCard';
-// import{getInitAdaptiveSurveyCard, setCardName, setCardDepartment,setCardChoice,setCardReason,setCardSurveyBtn } from '../AdaptiveCard/survey';
+import{getInitAdaptiveSurveyCard, setCardName, setCardDepartment,setCardChoice,setCardReason,setCardSurveyBtn } from '../AdaptiveCard/survey';
 import { getBaseUrl } from '../../configVariables';
 import { ImageUtil } from '../../utility/imageutility';
 import { TFunction } from "i18next";
-// import { CKEditor } from '@ckeditor/ckeditor5-react';
-// import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 
 type dropdownItem = {
@@ -39,12 +25,10 @@ type dropdownItem = {
 
 export interface IDraftMessage {
     id?: string,
-    title: string,
-    imageLink?: string,
-    summary?: string,
-    author: string,
-    buttonTitle?: string,
-    buttonLink?: string,
+    name: string,
+    department: string,
+    choice: string,
+    reason: string,
     teams: any[],
     rosters: any[],
     groups: any[],
@@ -52,12 +36,10 @@ export interface IDraftMessage {
 }
 
 export interface formState {
-    title: string,
-    summary?: any,
-    btnLink?: string,
-    imageLink?: string,
-    btnTitle?: string,
-    author: string,
+    name: string,
+    department: string,
+    choice: string,
+    reason: string,
     card?: any,
     page: string,
     teamsOptionSelected: boolean,
@@ -79,9 +61,7 @@ export interface formState {
     selectedRadioBtn: string,
     selectedTeams: dropdownItem[],
     selectedRosters: dropdownItem[],
-    selectedGroups: dropdownItem[],
-    errorImageUrlMessage: string,
-    errorButtonUrlMessage: string,
+    selectedGroups: dropdownItem[]
 }
 
 export interface INewMessageProps extends RouteComponentProps, WithTranslation {
@@ -96,16 +76,14 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
         super(props);
         initializeIcons();
         this.localize = this.props.t;
-        this.card = getInitAdaptiveCard(this.localize);
+        this.card = getInitAdaptiveSurveyCard(this.localize);
         this.setDefaultCard(this.card);
 
         this.state = {
-            title: "",
-            summary: "",
-            author: "",
-            btnLink: "",
-            imageLink: "",
-            btnTitle: "",
+            name: "",
+            department: "",
+            choice: "",
+            reason: "",
             card: this.card,
             page: "CardCreation",
             teamsOptionSelected: true,
@@ -124,9 +102,7 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
             selectedRadioBtn: "teams",
             selectedTeams: [],
             selectedRosters: [],
-            selectedGroups: [],
-            errorImageUrlMessage: "",
-            errorButtonUrlMessage: "",
+            selectedGroups: []
         }
     }
 
@@ -164,10 +140,6 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
                     adaptiveCard.parse(this.state.card);
                     let renderedCard = adaptiveCard.render();
                     document.getElementsByClassName('adaptiveCardContainer')[0].appendChild(renderedCard);
-                    if (this.state.btnLink) {
-                        let link = this.state.btnLink;
-                        adaptiveCard.onExecuteAction = function (action) { window.open(link, '_blank'); };
-                    }
                 })
             }
         });
@@ -326,12 +298,6 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
     }
 
     public render(): JSX.Element {
-        // Initialize a markdown parser
-        const mdParser = new MarkdownIt({
-            html: true,
-            linkify: true,
-            typographer: true,
-        });
         if (this.state.loader) {
             return (
                 <div className="Loader">
@@ -373,27 +339,7 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
                                 /> */}
                                 <div>
                                   <p className='sum-label'>Summary</p>
-                                  <MdEditor
-                                    style={{margin: "20px auto",
-                                    width: "87%"}}
-                                    renderHTML={(text) => mdParser.render(text)}
-                                    onChange={({html, text})=> {    
-                                        console.log( html, text)
-                                        let showDefaultCard = (!this.state.title && !this.state.imageLink && !this.state.summary && !text && !this.state.btnTitle && !this.state.btnLink);   
-                                        setCardSummary(this.card, text);
-                                        this.setState({
-                                            summary: text,
-                                            card: this.card
-                                        }, () => {
-                                            if (showDefaultCard) {
-                                                this.setDefaultCard(this.card);
-                                            }
-                                            this.updateCard();
-                                        });
-                                      }}
-                                      onImageUpload={this.handleImageUpload}
-                                    />
-                                 {/* <CKEditor
+                                 <CKEditor
                                     editor={ClassicEditor}
                                     data= ""
                                     className="ck ck-editor"
@@ -411,9 +357,9 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
                                         const data = editor.getData();
                                         let showDefaultCard = (!this.state.title && !this.state.imageLink && !this.state.summary && !data && !this.state.btnTitle && !this.state.btnLink);   
                                         console.log({ event, editor, data });
-                                        setCardSummary(this.card, data.replace(/<[^>]*(>|$)|&nbsp;|&zwnj;|&raquo;|&laquo;|&gt;/g, ''));
+                                        setCardSummary(this.card, HtmlReactParser(data));
                                         this.setState({
-                                            summary: data.replace(/<[^>]*(>|$)|&nbsp;|&zwnj;|&raquo;|&laquo;|&gt;/g, ''),
+                                            summary: HtmlReactParser(data),
                                             card: this.card
                                         }, () => {
                                             if (showDefaultCard) {
@@ -429,7 +375,7 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
                                     onFocus={(event: any, editor: any) => {
                                         console.log('Focus.', editor);
                                     }}
-                                />  */}
+                                /> 
                                 
                                 </div>
                                  <Input
@@ -858,17 +804,6 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
             this.updateCard();
         });
     }
-
-    private handleImageUpload = (file: File): Promise<string> => {
-        return new Promise(resolve => {
-          const reader = new FileReader();
-          reader.onload = data => {
-            // @ts-ignore
-            resolve(data.target.result);
-          };
-          reader.readAsDataURL(file);
-        });
-      };
 
     private onBtnTitleChanged = (event: any) => {
         const showDefaultCard = (!this.state.title && !this.state.imageLink && !this.state.summary && !this.state.author && !event.target.value && !this.state.btnLink);
