@@ -85,6 +85,9 @@ class TabContainer extends React.Component<ITaskInfoProps, ITabContainerState> {
                 <div className="newPostBtn">
                     <Button content={this.localize("NewMessage")} onClick={this.onNewMessage} primary />
                 </div>
+                {/* <div className="newPostBtn2">
+                    <Button content={this.localize("New Survey")} onClick={this.onNewMessage} primary />
+                </div> */}
                 <div className="messageContainer">
                     <Accordion defaultActiveIndex={[0, 1]} panels={panels} />
                 </div>

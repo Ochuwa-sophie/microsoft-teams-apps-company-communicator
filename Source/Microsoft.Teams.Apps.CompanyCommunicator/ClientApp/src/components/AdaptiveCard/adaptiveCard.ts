@@ -7,7 +7,7 @@ export const getInitAdaptiveCard = (t: TFunction) => {
             "type": "AdaptiveCard",
             "body": [
                 {
-                    "type": "RichTextBlock",
+                    "type": "TextBlock",
                     "weight": "Bolder",
                     "text": titleTextAsString,
                     "size": "ExtraLarge",
@@ -24,7 +24,7 @@ export const getInitAdaptiveCard = (t: TFunction) => {
                 {
                     "type": "TextBlock",
                     "text": "",
-                    "weight": "Bolder",
+                    "weight": "Default",
                     "wrap": true
                 },
                 {
@@ -62,7 +62,7 @@ export const getCardSummary = (card: any) => {
     return card.body[2].text;
 }
 
-export const setCardSummary = (card: any, summary?: string) => {
+export const setCardSummary = (card: any, summary?: any ) => {
     
     card.body[2].text = summary;
 }
