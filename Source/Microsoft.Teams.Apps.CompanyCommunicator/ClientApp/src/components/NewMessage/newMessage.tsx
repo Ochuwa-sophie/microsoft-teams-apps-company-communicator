@@ -353,7 +353,7 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
                                     autoComplete="off"
                                     required
                                 /> 
-
+                                <div className="flexInput">
                                  <Input
                                     className="inputField"
                                     value={this.state.imageLink}
@@ -362,7 +362,11 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
                                     onChange={this.onImageLinkChanged}
                                     errorLabel={this.state.errorImageUrlMessage}
                                     autoComplete="off"
-                                /> 
+                                  /> 
+                                    <div className="buttonUpload">
+                                       <Button content={this.localize("Upload")} primary />
+                                    </div>
+                                </div>
                                  {/* <TextArea
                                     className="inputField textArea"
                                     autoFocus
@@ -393,43 +397,6 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
                                       }}
                                       onImageUpload={this.handleImageUpload}
                                     />
-                                 {/* <CKEditor
-                                    editor={ClassicEditor}
-                                    data= ""
-                                    className="ck ck-editor"
-                                    onInit={(editor: any) => {
-                                        // You can store the "editor" and use when it is needed.
-                                        console.log('Editor is ready to use!', editor);
-                                    }}
-                                    config={{ckfinder: {
-                                        // Upload the images to the server using the CKFinder QuickUpload command.
-                                        uploadUrl: '/ckfinder/connector?command=QuickUpload&type=Images&responseType=json'
-                                      }}
-                                    }
-                                    onChange={
-                                        (event: any, editor: any) => {
-                                        const data = editor.getData();
-                                        let showDefaultCard = (!this.state.title && !this.state.imageLink && !this.state.summary && !data && !this.state.btnTitle && !this.state.btnLink);   
-                                        console.log({ event, editor, data });
-                                        setCardSummary(this.card, data.replace(/<[^>]*(>|$)|&nbsp;|&zwnj;|&raquo;|&laquo;|&gt;/g, ''));
-                                        this.setState({
-                                            summary: data.replace(/<[^>]*(>|$)|&nbsp;|&zwnj;|&raquo;|&laquo;|&gt;/g, ''),
-                                            card: this.card
-                                        }, () => {
-                                            if (showDefaultCard) {
-                                                this.setDefaultCard(this.card);
-                                            }
-                                            this.updateCard();
-                                        });
-                                    }
-                                 }
-                                    onBlur={(event: any, editor: any) => {
-                                        console.log('Blur.', editor);
-                                    }}
-                                    onFocus={(event: any, editor: any) => {
-                                        console.log('Focus.', editor);
-                                    }}
-                                />  */}
                                 
                                 </div>
                                  <Input
