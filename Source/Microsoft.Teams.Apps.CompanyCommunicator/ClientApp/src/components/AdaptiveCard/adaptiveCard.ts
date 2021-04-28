@@ -21,6 +21,7 @@ export const getInitAdaptiveCard = (t: TFunction) => {
                     "width": "400px",
                     "altText": ""
                 },
+                
                 {
                     "type": "TextBlock",
                     "text": "",
@@ -35,6 +36,7 @@ export const getInitAdaptiveCard = (t: TFunction) => {
                     "text": ""
                 }
             ],
+            
             "$schema": "https://adaptivecards.io/schemas/adaptive-card.json",
             "version": "1.0"
         }
