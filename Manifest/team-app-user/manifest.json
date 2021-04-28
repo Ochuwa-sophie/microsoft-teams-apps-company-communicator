@@ -1,5 +1,5 @@
 {
-    "$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.5/MicrosoftTeams.schema.json",
+    "$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.8/MicrosoftTeams.schema.json",
     "manifestVersion": "1.8",
     "version": "4.0.0",
     "id": "148a66bb-e83d-425a-927d-09f4299a9274",
@@ -24,7 +24,7 @@
     },
     "accentColor": "#64A2CC",
     "bots": [{
-      "botId": "95ae8596-5dcf-48b3-b620-fa791701140e",
+      "botId": "cbb6aeb3-8c9c-4f02-b446-513e17b743e5",
       "scopes": [
         "personal",
         "team"
@@ -37,6 +37,6 @@
       "messageTeamMembers"
     ],
     "validDomains": [
-      "infinioncommunication.azurefd.net"
+      "infinioncompanycommunicator101.azurefd.net"
     ]
   }

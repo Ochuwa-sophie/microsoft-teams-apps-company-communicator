@@ -24,6 +24,7 @@ export const getInitAdaptiveCard = (t: TFunction) => {
                 {
                     "type": "TextBlock",
                     "text": "",
+                    "weight": "Default",
                     "wrap": true
                 },
                 {
@@ -57,10 +58,12 @@ export const setCardImageLink = (card: any, imageLink?: string) => {
 }
 
 export const getCardSummary = (card: any) => {
+
     return card.body[2].text;
 }
 
-export const setCardSummary = (card: any, summary?: string) => {
+export const setCardSummary = (card: any, summary?: any ) => {
+    
     card.body[2].text = summary;
 }
 

@@ -142,7 +142,6 @@ namespace Microsoft.Teams.Apps.CompanyCommunicator
             {
                 configuration.RootPath = "ClientApp/build";
             });
-            
 
             // Add blob client.
             services.AddSingleton(sp => new BlobContainerClient(

@@ -1,6 +1,11 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+import MarkdownIt from 'markdown-it';
+import MdEditor from 'react-markdown-editor-lite'
+// import style manually
+import 'react-markdown-editor-lite/lib/index.css';
 import { RouteComponentProps } from 'react-router-dom';
+// import HtmlReactParser from 'html-react-parser';
 import { withTranslation, WithTranslation } from "react-i18next";
 import { Input, TextArea, Radiobutton, RadiobuttonGroup } from 'msteams-ui-components-react';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
@@ -14,12 +19,12 @@ import {
     getInitAdaptiveCard, setCardTitle, setCardImageLink, setCardSummary,
     setCardAuthor, setCardBtn
 } from '../AdaptiveCard/adaptiveCard';
+// import{getInitAdaptiveSurveyCard, setCardName, setCardDepartment,setCardChoice,setCardReason,setCardSurveyBtn } from '../AdaptiveCard/survey';
 import { getBaseUrl } from '../../configVariables';
 import { ImageUtil } from '../../utility/imageutility';
 import { TFunction } from "i18next";
-import { Editor, EditorState } from 'react-draft-wysiwyg';
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import { RichUtils} from 'draft-js';
+// import { CKEditor } from '@ckeditor/ckeditor5-react';
+// import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 
 type dropdownItem = {
@@ -48,7 +53,7 @@ export interface IDraftMessage {
 
 export interface formState {
     title: string,
-    summary?: string,
+    summary?: any,
     btnLink?: string,
     imageLink?: string,
     btnTitle?: string,
@@ -321,6 +326,12 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
     }
 
     public render(): JSX.Element {
+        // Initialize a markdown parser
+        const mdParser = new MarkdownIt({
+            html: true,
+            linkify: true,
+            typographer: true,
+        });
         if (this.state.loader) {
             return (
                 <div className="Loader">
@@ -333,7 +344,7 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
                     <div className="taskModule">
                         <div className="formContainer">
                             <div className="formContentContainer" >
-                                <Input
+                                 <Input
                                     className="inputField"
                                     value={this.state.title}
                                     label={this.localize("TitleText")}
@@ -341,9 +352,9 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
                                     onChange={this.onTitleChanged}
                                     autoComplete="off"
                                     required
-                                />
-
-                                <Input
+                                /> 
+                                <div className="flexInput">
+                                 <Input
                                     className="inputField"
                                     value={this.state.imageLink}
                                     label={this.localize("ImageURL")}
@@ -351,25 +362,51 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
                                     onChange={this.onImageLinkChanged}
                                     errorLabel={this.state.errorImageUrlMessage}
                                     autoComplete="off"
-                                />
-
-                                <TextArea
+                                  /> 
+                                    <div className="buttonUpload">
+                                       <Button content={this.localize("Upload")} primary />
+                                    </div>
+                                </div>
+                                 {/* <TextArea
                                     className="inputField textArea"
                                     autoFocus
                                     placeholder={this.localize("Summary")}
                                     label={this.localize("Summary")}
                                     value={this.state.summary}
                                     onChange={this.onSummaryChanged}
-                                />
-
-                                <Input
+                                /> */}
+                                <div>
+                                  <p className='sum-label'>Summary</p>
+                                  <MdEditor
+                                    style={{margin: "20px auto",
+                                    width: "87%"}}
+                                    renderHTML={(text) => mdParser.render(text)}
+                                    onChange={({html, text})=> {    
+                                        console.log( html, text)
+                                        let showDefaultCard = (!this.state.title && !this.state.imageLink && !this.state.summary && !text && !this.state.btnTitle && !this.state.btnLink);   
+                                        setCardSummary(this.card, text);
+                                        this.setState({
+                                            summary: text,
+                                            card: this.card
+                                        }, () => {
+                                            if (showDefaultCard) {
+                                                this.setDefaultCard(this.card);
+                                            }
+                                            this.updateCard();
+                                        });
+                                      }}
+                                      onImageUpload={this.handleImageUpload}
+                                    />
+                                
+                                </div>
+                                 <Input
                                     className="inputField"
                                     value={this.state.author}
                                     label={this.localize("Author")}
                                     placeholder={this.localize("Author")}
                                     onChange={this.onAuthorChanged}
                                     autoComplete="off"
-                                />
+                                /> 
 
                                 <Input
                                     className="inputField"
@@ -788,6 +825,17 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
             this.updateCard();
         });
     }
+
+    private handleImageUpload = (file: File): Promise<string> => {
+        return new Promise(resolve => {
+          const reader = new FileReader();
+          reader.onload = data => {
+            // @ts-ignore
+            resolve(data.target.result);
+          };
+          reader.readAsDataURL(file);
+        });
+      };
 
     private onBtnTitleChanged = (event: any) => {
         const showDefaultCard = (!this.state.title && !this.state.imageLink && !this.state.summary && !this.state.author && !event.target.value && !this.state.btnLink);
