@@ -1,6 +1,7 @@
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+// import * as ReactDOM from 'react-dom';
 import MarkdownIt from 'markdown-it';
+import { Guid } from "guid-typescript";
 import MdEditor from 'react-markdown-editor-lite'
 // import style manually
 import 'react-markdown-editor-lite/lib/index.css';
@@ -363,8 +364,14 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
                                     errorLabel={this.state.errorImageUrlMessage}
                                     autoComplete="off"
                                   /> 
-                                    <div className="buttonUpload">
-                                       <Button content={this.localize("Upload")} primary />
+                                <div className="buttonUpload">
+                                 <Button 
+                                    content={this.localize("Upload")} 
+                                    primary 
+                                    onClick={this.onImageUpload}
+
+                                    />
+
                                     </div>
                                 </div>
                                  {/* <TextArea
@@ -810,6 +817,25 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
 
     private onAuthorChanged = (event: any) => {
         let showDefaultCard = (!this.state.title && !this.state.imageLink && !this.state.summary && !event.target.value && !this.state.btnTitle && !this.state.btnLink);
+        setCardTitle(this.card, this.state.title);
+        setCardImageLink(this.card, this.state.imageLink);
+        setCardSummary(this.card, this.state.summary);
+        setCardAuthor(this.card, event.target.value);
+        setCardBtn(this.card, this.state.btnTitle, this.state.btnLink);
+        this.setState({
+            author: event.target.value,
+            card: this.card
+        }, () => {
+            if (showDefaultCard) {
+                this.setDefaultCard(this.card);
+            }
+            this.updateCard();
+        });
+    }
+
+
+    private onImageUpload = (event: any) =>{
+        let uniqueFileName = (!this.state.title && !this.state.imageLink && !this.state.summary && !event.target.value && !this.state.btnTitle && !this.state.btnLink);
         setCardTitle(this.card, this.state.title);
         setCardImageLink(this.card, this.state.imageLink);
         setCardSummary(this.card, this.state.summary);

@@ -11,12 +11,13 @@
     using Microsoft.Teams.Apps.CompanyCommunicator.Repositories;
     using Microsoft.Teams.Apps.CompanyCommunicator.ViewModels;
 
-    public class FileUploadController : Controller
+    public class FileUploadController : ControllerBase
     {
         private readonly IDbRepository repository;
         private readonly IConfiguration configuration;
 
         private readonly IHostingEnvironment hostingEnvironment;
+
 
         public FileUploadController(IDbRepository repository, IHostingEnvironment hostingEnvironment, IConfiguration configuration)
         {
@@ -62,14 +63,15 @@
                             ResourceInfo = fileUpload,
                         };
                         model.ResourceInfo.SharePointFilePath =
-                            this.configuration["SharePointSiteBaseUrl"] +
+                            this.configuration["https://infinionco0.sharepoint.com/sites/CompanyCommunicatorApp"] +
                             "/UserUploaded%20Documents/Forms/AllItems.aspx?id=/teams/platform/UserUploaded Documents/" +
                             fileUpload.File.FileName +
                             "&parent=/teams/platform/UserUploaded Documents";
                         model.type = Constants.SubmitNewRequest;
                         model.ResourceInfo.FileName = fileUpload.File.FileName;
-                        model.AppId = configuration["MicrosoftAppId"];
-                        return View("Create", model);
+                        model.AppId = configuration["1c07cd26-a088-4db8-8928-ace382fa219f"];
+                        return JSON(model);
+
                     }
                     else
                     {
@@ -78,7 +80,7 @@
                 }
             }
 
-            return View(fileUpload);
+            return Json("File not found"); // more appropriate with json
         }
 
         [HttpGet]

@@ -2,9 +2,9 @@
 using Microsoft.Teams.Apps.CompanyCommunicator.Models;
 using System.ComponentModel.DataAnnotations;
 
-namespace Microsoft.Teams.Apps.CompanyCommunicator.ViewModels
+namespace Microsoft.Teams.Apps.CompanyCommunicator.Models
 {
-    public class FileUploadViewModel: NewResourceInformation
+    public class FileUploadModel
     {
         [Required]
         public IFormFile File { get; set; }
