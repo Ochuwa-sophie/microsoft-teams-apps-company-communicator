@@ -1,7 +1,7 @@
 {
-    "$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.5/MicrosoftTeams.schema.json",
-    "manifestVersion": "1.5",
-    "version": "4.0.0",
+    "$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.8/MicrosoftTeams.schema.json",
+    "manifestVersion": "1.8",
+    "version": "4.0.1",
     "id": "1c07cd26-a088-4db8-8928-ace382fa219f",
     "packageName": "com.microsoft.teams.companycommunicator.authors",
     "developer": {
@@ -24,14 +24,14 @@
     },
     "accentColor": "#64A2CC",
     "configurableTabs": [{
-      "configurationUrl": "https://InfinionCommunication.azurefd.net/configtab",
+      "configurationUrl": "https://infinioncompanycommunicator101.azurefd.net/configtab",
       "canUpdateConfiguration": true,
       "scopes": [
         "team"
       ]
     }],
     "bots": [{
-      "botId": "6521f0b2-8ee8-471f-920a-318038db0825",
+      "botId": "53f749af-145b-4beb-818d-cd8b5e19d41b",
       "scopes": [
         "team"
       ],
@@ -43,10 +43,10 @@
       "messageTeamMembers"
     ],
     "validDomains": [
-      "InfinionCommunication.azurefd.net"
+      "infinioncompanycommunicator101.azurefd.net"
     ],
     "webApplicationInfo": {
       "id": "6521f0b2-8ee8-471f-920a-318038db0825",
-      "resource": "api://InfinionCommunication.azurefd.net"
+      "resource": "api://infinioncompanycommunicator101.azurefd.net"
     }
   }

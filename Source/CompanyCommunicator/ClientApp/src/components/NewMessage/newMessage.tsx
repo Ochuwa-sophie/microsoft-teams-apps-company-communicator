@@ -2,8 +2,14 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+// import * as ReactDOM from 'react-dom';
+import MarkdownIt from 'markdown-it';
+import { Guid } from "guid-typescript";
+import MdEditor from 'react-markdown-editor-lite'
+// import style manually
+import 'react-markdown-editor-lite/lib/index.css';
 import { RouteComponentProps } from 'react-router-dom';
+// import HtmlReactParser from 'html-react-parser';
 import { withTranslation, WithTranslation } from "react-i18next";
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import * as AdaptiveCards from "adaptivecards";
@@ -16,12 +22,12 @@ import {
     getInitAdaptiveCard, setCardTitle, setCardImageLink, setCardSummary,
     setCardAuthor, setCardBtn
 } from '../AdaptiveCard/adaptiveCard';
+// import{getInitAdaptiveSurveyCard, setCardName, setCardDepartment,setCardChoice,setCardReason,setCardSurveyBtn } from '../AdaptiveCard/survey';
 import { getBaseUrl } from '../../configVariables';
 import { ImageUtil } from '../../utility/imageutility';
 import { TFunction } from "i18next";
-import { Editor, EditorState } from 'react-draft-wysiwyg';
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import { RichUtils} from 'draft-js';
+// import { CKEditor } from '@ckeditor/ckeditor5-react';
+// import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 
 type dropdownItem = {
@@ -50,7 +56,7 @@ export interface IDraftMessage {
 
 export interface formState {
     title: string,
-    summary?: string,
+    summary?: any,
     btnLink?: string,
     imageLink?: string,
     btnTitle?: string,
@@ -323,6 +329,12 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
     }
 
     public render(): JSX.Element {
+        // Initialize a markdown parser
+        const mdParser = new MarkdownIt({
+            html: true,
+            linkify: true,
+            typographer: true,
+        });
         if (this.state.loader) {
             return (
                 <div className="Loader">
@@ -333,6 +345,7 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
             if (this.state.page === "CardCreation") {
                 return (
                     <div className="taskModule">
+<<<<<<< HEAD:Source/CompanyCommunicator/ClientApp/src/components/NewMessage/newMessage.tsx
                         <Flex column className="formContainer" vAlign="stretch" gap="gap.small" styles={{ background: "white" }}>
                             <Flex className="scrollableContent">
                                 <Flex.Item size="size.half">
@@ -407,6 +420,108 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
                             </Flex>
 
                         </Flex>
+=======
+                        <div className="formContainer">
+                            <div className="formContentContainer" >
+                                 <Input
+                                    className="inputField"
+                                    value={this.state.title}
+                                    label={this.localize("TitleText")}
+                                    placeholder={this.localize("PlaceHolderTitle")}
+                                    onChange={this.onTitleChanged}
+                                    autoComplete="off"
+                                    required
+                                /> 
+                                <div className="flexInput">
+                                 <Input
+                                    className="inputField"
+                                    value={this.state.imageLink}
+                                    label={this.localize("ImageURL")}
+                                    placeholder={this.localize("ImageURL")}
+                                    onChange={this.onImageLinkChanged}
+                                    errorLabel={this.state.errorImageUrlMessage}
+                                    autoComplete="off"
+                                  /> 
+                                <div className="buttonUpload">
+                                 <Button 
+                                    content={this.localize("Upload")} 
+                                    primary 
+                                    onClick={this.onImageUpload}
+
+                                    />
+
+                                    </div>
+                                </div>
+                                 {/* <TextArea
+                                    className="inputField textArea"
+                                    autoFocus
+                                    placeholder={this.localize("Summary")}
+                                    label={this.localize("Summary")}
+                                    value={this.state.summary}
+                                    onChange={this.onSummaryChanged}
+                                /> */}
+                                <div>
+                                  <p className='sum-label'>Summary</p>
+                                  <MdEditor
+                                    style={{margin: "20px auto",
+                                    width: "87%"}}
+                                    renderHTML={(text) => mdParser.render(text)}
+                                    onChange={({html, text})=> {    
+                                        console.log( html, text)
+                                        let showDefaultCard = (!this.state.title && !this.state.imageLink && !this.state.summary && !text && !this.state.btnTitle && !this.state.btnLink);   
+                                        setCardSummary(this.card, text);
+                                        this.setState({
+                                            summary: text,
+                                            card: this.card
+                                        }, () => {
+                                            if (showDefaultCard) {
+                                                this.setDefaultCard(this.card);
+                                            }
+                                            this.updateCard();
+                                        });
+                                      }}
+                                      onImageUpload={this.handleImageUpload}
+                                    />
+                                
+                                </div>
+                                 <Input
+                                    className="inputField"
+                                    value={this.state.author}
+                                    label={this.localize("Author")}
+                                    placeholder={this.localize("Author")}
+                                    onChange={this.onAuthorChanged}
+                                    autoComplete="off"
+                                /> 
+
+                                <Input
+                                    className="inputField"
+                                    value={this.state.btnTitle}
+                                    label={this.localize("ButtonTitle")}
+                                    placeholder={this.localize("ButtonTitle")}
+                                    onChange={this.onBtnTitleChanged}
+                                    autoComplete="off"
+                                />
+
+                                <Input
+                                    className="inputField"
+                                    value={this.state.btnLink}
+                                    label={this.localize("ButtonURL")}
+                                    placeholder={this.localize("ButtonURL")}
+                                    onChange={this.onBtnLinkChanged}
+                                    errorLabel={this.state.errorButtonUrlMessage}
+                                    autoComplete="off"
+                                />
+                            </div>
+                            <div className="adaptiveCardContainer">
+                            </div>
+                        </div>
+
+                        <div className="footerContainer">
+                            <div className="buttonContainer">
+                                <Button content={this.localize("Next")} disabled={this.isNextBtnDisabled()} id="saveBtn" onClick={this.onNext} primary />
+                            </div>
+                        </div>
+>>>>>>> d601247dc8a634695c6b8aa2523c47f65ccf3c0a:Source/Microsoft.Teams.Apps.CompanyCommunicator/ClientApp/src/components/NewMessage/newMessage.tsx
                     </div>
                 );
             }
@@ -855,6 +970,36 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
             this.updateCard();
         });
     }
+
+
+    private onImageUpload = (event: any) =>{
+        let uniqueFileName = (!this.state.title && !this.state.imageLink && !this.state.summary && !event.target.value && !this.state.btnTitle && !this.state.btnLink);
+        setCardTitle(this.card, this.state.title);
+        setCardImageLink(this.card, this.state.imageLink);
+        setCardSummary(this.card, this.state.summary);
+        setCardAuthor(this.card, event.target.value);
+        setCardBtn(this.card, this.state.btnTitle, this.state.btnLink);
+        this.setState({
+            author: event.target.value,
+            card: this.card
+        }, () => {
+            if (showDefaultCard) {
+                this.setDefaultCard(this.card);
+            }
+            this.updateCard();
+        });
+    }
+
+    private handleImageUpload = (file: File): Promise<string> => {
+        return new Promise(resolve => {
+          const reader = new FileReader();
+          reader.onload = data => {
+            // @ts-ignore
+            resolve(data.target.result);
+          };
+          reader.readAsDataURL(file);
+        });
+      };
 
     private onBtnTitleChanged = (event: any) => {
         const showDefaultCard = (!this.state.title && !this.state.imageLink && !this.state.summary && !this.state.author && !event.target.value && !this.state.btnLink);

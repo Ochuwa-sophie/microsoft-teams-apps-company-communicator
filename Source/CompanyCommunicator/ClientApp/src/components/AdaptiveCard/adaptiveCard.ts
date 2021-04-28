@@ -24,9 +24,11 @@ export const getInitAdaptiveCard = (t: TFunction) => {
                     "width": "400px",
                     "altText": ""
                 },
+                
                 {
                     "type": "TextBlock",
                     "text": "",
+                    "weight": "Default",
                     "wrap": true
                 },
                 {
@@ -37,6 +39,7 @@ export const getInitAdaptiveCard = (t: TFunction) => {
                     "text": ""
                 }
             ],
+            
             "$schema": "https://adaptivecards.io/schemas/adaptive-card.json",
             "version": "1.0"
         }
@@ -60,10 +63,12 @@ export const setCardImageLink = (card: any, imageLink?: string) => {
 }
 
 export const getCardSummary = (card: any) => {
+
     return card.body[2].text;
 }
 
-export const setCardSummary = (card: any, summary?: string) => {
+export const setCardSummary = (card: any, summary?: any ) => {
+    
     card.body[2].text = summary;
 }
 
