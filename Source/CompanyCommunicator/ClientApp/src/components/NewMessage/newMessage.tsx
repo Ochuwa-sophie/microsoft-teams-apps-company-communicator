@@ -2,19 +2,17 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
-// import * as ReactDOM from 'react-dom';
 import MarkdownIt from 'markdown-it';
-import { Guid } from "guid-typescript";
 import MdEditor from 'react-markdown-editor-lite'
-// import style manually
+import { Guid } from "guid-typescript";
 import 'react-markdown-editor-lite/lib/index.css';
 import { RouteComponentProps } from 'react-router-dom';
-// import HtmlReactParser from 'html-react-parser';
 import { withTranslation, WithTranslation } from "react-i18next";
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import * as AdaptiveCards from "adaptivecards";
 import { Button, Loader, Dropdown, Text, Flex, Input, TextArea, RadioGroup } from '@fluentui/react-northstar'
 import * as microsoftTeams from "@microsoft/teams-js";
+
 import './newMessage.scss';
 import './teamTheme.scss';
 import { getDraftNotification, getTeams, createDraftNotification, updateDraftNotification, searchGroups, getGroups, verifyGroupAccess } from '../../apis/messageListApi';
@@ -22,13 +20,9 @@ import {
     getInitAdaptiveCard, setCardTitle, setCardImageLink, setCardSummary,
     setCardAuthor, setCardBtn
 } from '../AdaptiveCard/adaptiveCard';
-// import{getInitAdaptiveSurveyCard, setCardName, setCardDepartment,setCardChoice,setCardReason,setCardSurveyBtn } from '../AdaptiveCard/survey';
 import { getBaseUrl } from '../../configVariables';
 import { ImageUtil } from '../../utility/imageutility';
 import { TFunction } from "i18next";
-// import { CKEditor } from '@ckeditor/ckeditor5-react';
-// import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-
 
 type dropdownItem = {
     key: string,
@@ -345,84 +339,11 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
             if (this.state.page === "CardCreation") {
                 return (
                     <div className="taskModule">
-<<<<<<< HEAD:Source/CompanyCommunicator/ClientApp/src/components/NewMessage/newMessage.tsx
-                        <Flex column className="formContainer" vAlign="stretch" gap="gap.small" styles={{ background: "white" }}>
+                        <Flex column className="formContainer" vAlign="stretch" gap="gap.small" 
+                            styles={{ background: "white" }}>
                             <Flex className="scrollableContent">
                                 <Flex.Item size="size.half">
                                     <Flex column className="formContentContainer">
-                                        <Input className="inputField"
-                                            value={this.state.title}
-                                            label={this.localize("TitleText")}
-                                            placeholder={this.localize("PlaceHolderTitle")}
-                                            onChange={this.onTitleChanged}
-                                            autoComplete="off"
-                                            fluid
-                                        />
-
-                                        <Input fluid className="inputField"
-                                            value={this.state.imageLink}
-                                            label={this.localize("ImageURL")}
-                                            placeholder={this.localize("ImageURL")}
-                                            onChange={this.onImageLinkChanged}
-                                            error={!(this.state.errorImageUrlMessage === "")}
-                                            autoComplete="off"
-                                        />
-                                        <Text className={(this.state.errorImageUrlMessage === "") ? "hide" : "show"} error size="small" content={this.state.errorImageUrlMessage} />
-
-                                        <div className="textArea">
-                                            <Text content={this.localize("Summary")} />
-                                            <TextArea
-                                                autoFocus
-                                                placeholder={this.localize("Summary")}
-                                                value={this.state.summary}
-                                                onChange={this.onSummaryChanged}
-                                                fluid />
-                                        </div>
-
-                                        <Input className="inputField"
-                                            value={this.state.author}
-                                            label={this.localize("Author")}
-                                            placeholder={this.localize("Author")}
-                                            onChange={this.onAuthorChanged}
-                                            autoComplete="off"
-                                            fluid
-                                        />
-                                        <Input className="inputField"
-                                            fluid
-                                            value={this.state.btnTitle}
-                                            label={this.localize("ButtonTitle")}
-                                            placeholder={this.localize("ButtonTitle")}
-                                            onChange={this.onBtnTitleChanged}
-                                            autoComplete="off"
-                                        />
-                                        <Input className="inputField"
-                                            fluid
-                                            value={this.state.btnLink}
-                                            label={this.localize("ButtonURL")}
-                                            placeholder={this.localize("ButtonURL")}
-                                            onChange={this.onBtnLinkChanged}
-                                            error={!(this.state.errorButtonUrlMessage === "")}
-                                            autoComplete="off"
-                                        />
-                                        <Text className={(this.state.errorButtonUrlMessage === "") ? "hide" : "show"} error size="small" content={this.state.errorButtonUrlMessage} />
-                                    </Flex>
-                                </Flex.Item>
-                                <Flex.Item size="size.half">
-                                    <div className="adaptiveCardContainer">
-                                    </div>
-                                </Flex.Item>
-                            </Flex>
-
-                            <Flex className="footerContainer" vAlign="end" hAlign="end">
-                                <Flex className="buttonContainer">
-                                    <Button content={this.localize("Next")} disabled={this.isNextBtnDisabled()} id="saveBtn" onClick={this.onNext} primary />
-                                </Flex>
-                            </Flex>
-
-                        </Flex>
-=======
-                        <div className="formContainer">
-                            <div className="formContentContainer" >
                                  <Input
                                     className="inputField"
                                     value={this.state.title}
@@ -430,16 +351,15 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
                                     placeholder={this.localize("PlaceHolderTitle")}
                                     onChange={this.onTitleChanged}
                                     autoComplete="off"
-                                    required
+                                    fluid
                                 /> 
                                 <div className="flexInput">
-                                 <Input
-                                    className="inputField"
+                                <Input fluid className="inputField"
                                     value={this.state.imageLink}
                                     label={this.localize("ImageURL")}
                                     placeholder={this.localize("ImageURL")}
                                     onChange={this.onImageLinkChanged}
-                                    errorLabel={this.state.errorImageUrlMessage}
+                                    error={!(this.state.errorImageUrlMessage === "")}
                                     autoComplete="off"
                                   /> 
                                 <div className="buttonUpload">
@@ -452,14 +372,7 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
 
                                     </div>
                                 </div>
-                                 {/* <TextArea
-                                    className="inputField textArea"
-                                    autoFocus
-                                    placeholder={this.localize("Summary")}
-                                    label={this.localize("Summary")}
-                                    value={this.state.summary}
-                                    onChange={this.onSummaryChanged}
-                                /> */}
+                                
                                 <div>
                                   <p className='sum-label'>Summary</p>
                                   <MdEditor
@@ -491,10 +404,11 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
                                     placeholder={this.localize("Author")}
                                     onChange={this.onAuthorChanged}
                                     autoComplete="off"
+                                    fluid
                                 /> 
 
                                 <Input
-                                    className="inputField"
+                                    className="inputField" fluid
                                     value={this.state.btnTitle}
                                     label={this.localize("ButtonTitle")}
                                     placeholder={this.localize("ButtonTitle")}
@@ -503,25 +417,29 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
                                 />
 
                                 <Input
-                                    className="inputField"
+                                    className="inputField" fluid
                                     value={this.state.btnLink}
                                     label={this.localize("ButtonURL")}
                                     placeholder={this.localize("ButtonURL")}
                                     onChange={this.onBtnLinkChanged}
-                                    errorLabel={this.state.errorButtonUrlMessage}
+                                    error={!(this.state.errorButtonUrlMessage === "")}
                                     autoComplete="off"
                                 />
-                            </div>
+                                <Text className={(this.state.errorButtonUrlMessage === "") ? "hide" : "show"} error size="small" content={this.state.errorButtonUrlMessage} />
+                                    </Flex>
+                                </Flex.Item>
+                                <Flex.Item size="size.half">
                             <div className="adaptiveCardContainer">
                             </div>
-                        </div>
+                                </Flex.Item>
+                            </Flex>
+                            <Flex className="footerContainer" vAlign="end" hAlign="end">
+                                <Flex className="buttonContainer">
+                                    <Button content={this.localize("Next")} disabled={this.isNextBtnDisabled()} id="saveBtn" onClick={this.onNext} primary />
+                                </Flex>
+                            </Flex>
 
-                        <div className="footerContainer">
-                            <div className="buttonContainer">
-                                <Button content={this.localize("Next")} disabled={this.isNextBtnDisabled()} id="saveBtn" onClick={this.onNext} primary />
-                            </div>
-                        </div>
->>>>>>> d601247dc8a634695c6b8aa2523c47f65ccf3c0a:Source/Microsoft.Teams.Apps.CompanyCommunicator/ClientApp/src/components/NewMessage/newMessage.tsx
+                        </Flex>
                     </div>
                 );
             }
@@ -983,7 +901,7 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
             author: event.target.value,
             card: this.card
         }, () => {
-            if (showDefaultCard) {
+            if (uniqueFileName) {
                 this.setDefaultCard(this.card);
             }
             this.updateCard();

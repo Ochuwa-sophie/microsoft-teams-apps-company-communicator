@@ -83,7 +83,6 @@ class TabContainer extends React.Component<ITaskInfoProps, ITabContainerState> {
             <Flex className="tabContainer" column fill gap="gap.small">
                 <Flex className="newPostBtn" hAlign="end" vAlign="end">
                     <Button content={this.localize("NewMessage")} onClick={this.onNewMessage} primary />
-<<<<<<< HEAD:Source/CompanyCommunicator/ClientApp/src/components/TabContainer/tabContainer.tsx
                 </Flex>
                 <Flex className="messageContainer">
                     <Flex.Item grow={1} >
@@ -91,16 +90,6 @@ class TabContainer extends React.Component<ITaskInfoProps, ITabContainerState> {
                     </Flex.Item>
                 </Flex>
             </Flex>
-=======
-                </div>
-                {/* <div className="newPostBtn2">
-                    <Button content={this.localize("New Survey")} onClick={this.onNewMessage} primary />
-                </div> */}
-                <div className="messageContainer">
-                    <Accordion defaultActiveIndex={[0, 1]} panels={panels} />
-                </div>
-            </div>
->>>>>>> d601247dc8a634695c6b8aa2523c47f65ccf3c0a:Source/Microsoft.Teams.Apps.CompanyCommunicator/ClientApp/src/components/TabContainer/tabContainer.tsx
         );
     }
 
